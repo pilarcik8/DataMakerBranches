@@ -140,7 +140,11 @@ namespace TestKniznice
             switch (i)
             {
                 case 0:
-                    Title = faker.Name.Prefix();
+                    var newTitle = faker.Name.Prefix();
+                    while (newTitle == Title)
+                    {
+                        newTitle = faker.Name.Prefix();
+                    }
                     break;
                 case 1:
                     FirstName = faker.Name.FirstName();
@@ -155,7 +159,10 @@ namespace TestKniznice
                     Phone = faker.Phone.PhoneNumber();
                     break;
                 case 5:
-                    Gender = faker.PickRandom(new[] { "Male", "Female", "Other" });
+                    var newGender = faker.PickRandom(new[] { "Male", "Female", "Other" });
+                    while (newGender == Gender) { 
+                        Gender = faker.PickRandom(new[] { "Male", "Female", "Other" });
+                    }
                     break;
                 case 6:
                     Age = faker.Random.Int(18, 80);

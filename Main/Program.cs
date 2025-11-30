@@ -22,7 +22,6 @@ namespace TestKniznice
             // Vytvorenie vyslednej osoby
             var faker = new Faker("en");
             Person result = CreateFakePerson(faker);
-            ExportPerson(result, "res");
 
             // Tvorba 3 branchov
             Person leftPerson = result;
@@ -37,9 +36,6 @@ namespace TestKniznice
 
             for (int i = 0; i < atCount; i++)
             {
-                var propType = result.GetTypeOfAtribute(i);
-                object value;
-
                 AtributeAction actionR = GetAtributeAction();
                 AtributeAction actionL = GetAtributeActionWitourConfilct(actionR);
                 AtributeAction actionB = GetBaseWinningAcion(actionR, actionL);
@@ -50,24 +46,14 @@ namespace TestKniznice
 
                 ExecuteAction(rightPerson, i, actionR, faker);
                 ExecuteAction(leftPerson, i, actionL, faker);
-                ExecuteAction(basePeson, i, actionL, faker);
-
-                if (propType == typeof(int))
-                {
-                    value = result.GetAtribute<int>(i);
-                }
-                else if (propType == typeof(string))
-                {
-                    value = result.GetAtribute<string>(i);
-                }
-                else
-                {
-                    string erMessage = $"Neznami typ nastal na indexe: {i} (typ: {propType.FullName})";
-                    throw new InvalidOperationException(erMessage);
-                }
-
-                Console.WriteLine($"[{i}] {propType.Name} = {value}");
+                ExecuteAction(basePeson, i, actionB, faker);
             }
+            //Vytvorenie xml
+            ExportPerson(result, "res");
+            ExportPerson(rightPerson, "right");
+            ExportPerson(leftPerson, "left");
+            ExportPerson(basePeson, "base");
+
         }
 
         private static void ExecuteAction(Person person, int i, AtributeAction action, Faker faker)
@@ -75,17 +61,17 @@ namespace TestKniznice
             if (action == AtributeAction.KEEP)
                 return;
 
-            if (action == AtributeAction.CHANGE)
+            else if (action == AtributeAction.CHANGE)
             {
                 person.ChangeAttribute(i, faker);
             }
 
-            if (action == AtributeAction.REMOVE)
+            else if(action == AtributeAction.REMOVE)
             {
                 // potrebujem odstranit dany atribut z triedy (aspon nastavit aby sa neulozil do xml ked ho expornem)
             }
 
-            if (action == AtributeAction.ADD)
+            else if(action == AtributeAction.ADD)
             {
                 // potrebujem pridat novy atribut do triedy pred tento atribut (aspon nastavit aby sa ulozil do xml ked ho expornem)
             }
@@ -150,7 +136,7 @@ namespace TestKniznice
             {
                 // Relatívna cesta ku koreňu projektu
                 string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\"));
-                string outputDir = Path.Combine(projectDir, "vytvoreneSubory", "Base");
+                string outputDir = Path.Combine(projectDir, "vytvoreneSubory");
 
                 // Vytvorenie priečinku, ak neexistuje
                 Directory.CreateDirectory(outputDir);
