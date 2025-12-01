@@ -31,7 +31,7 @@ namespace TestKniznice
 
             int atCount = typeof(Person).GetProperties().Length;
 
-            //pre vasciu diferenciaciu r a l branchov pocas generovania
+            // Pre vasciu diferenciaciu r a l branchov pocas generovania
             double leftKeepProbability = Random.Shared.NextDouble() * 0.6 + 0.2; // [0.2, 0.8]
             double rightKeepProbability = 1.0 - leftKeepProbability;
             Console.WriteLine($"Left KEEP probability: {leftKeepProbability:P0}, Right KEEP probability: {rightKeepProbability:P0}");
@@ -49,53 +49,59 @@ namespace TestKniznice
                 }
                 else
                 {
-                    actionR = AtributeAction.KEEP;
                     actionL = GetAtributeAction();
+                    actionR = AtributeAction.KEEP;
+
                 }
 
-                if (actionR == AtributeAction.KEEP)
+                if (actionR == AtributeAction.KEEP && actionL == AtributeAction.KEEP)
                 {
-                    Console.WriteLine($"R + B action");
+                    Console.WriteLine($"\nR + L + B action");
+                    // nezalezi ktory branch sa vyberie, lebo oba maju KEEP
                     ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);
+                }
+                else if (actionR == AtributeAction.KEEP)
+                {
+                    Console.WriteLine($"\nL + B action");
+                    ExecuteSameAction(leftPerson, basePeson, i, actionL, faker);
                 }
                 else if (actionL == AtributeAction.KEEP)
                 {
-                    Console.WriteLine($"L + B action");
-                    ExecuteSameAction(leftPerson, basePeson, i, actionR, faker);
+                    Console.WriteLine($"\nR + B action");
+                    ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);
                 }
             }
+            Console.WriteLine();
             ExportPerson(resultPerson, "res");
             ExportPerson(rightPerson, "right");
             ExportPerson(leftPerson, "left");
             ExportPerson(basePeson, "base");
         }
 
-        private static string? ExecuteSameAction(Person rightPerson, Person leftPerson, int i, AtributeAction action, Faker faker)
+        private static void ExecuteSameAction(Person branchPerson, Person basePerson, int i, AtributeAction action, Faker faker)
         {
             if (action == AtributeAction.KEEP)
-                return null;
+            {
+                Console.WriteLine($"    Kept attribute: '{branchPerson.GetAttributeName(i)}'");
+                return;
 
+            }
             else if (action == AtributeAction.CHANGE)
             {
-                // change right, copy to left and return the new value so base can reuse it
-                string change = rightPerson.ChangeAttribute(i, faker);
-                leftPerson.SetAttribute(i, change);
-                return change;
+                string change = branchPerson.ChangeAttribute(i, faker);
+                basePerson.SetAttribute(i, change);
             }
-
             else if (action == AtributeAction.REMOVE)
             {
-                // potrebujem odstranit dany atribut z triedy (aspon nastavit aby sa neulozil do xml ked ho expornem)
-                return null;
+                Console.WriteLine($"    Removed attribute: '{branchPerson.GetAttributeName(i)}'");
+                branchPerson.RemoveAtribute(i);
+                basePerson.RemoveAtribute(i);
             }
 
             else if (action == AtributeAction.ADD)
             {
                 // potrebujem pridat novy atribut do triedy pred tento atribut (aspon nastavit aby sa ulozil do xml ked ho expornem)
-                return null;
             }
-
-            return null;
         }
 
         // Mozu byt bud identicke alebo aspon jeden z nich musi byt KEEP
