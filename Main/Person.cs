@@ -64,216 +64,148 @@ namespace TestKniznice
             {
                 case 0:
                     {
-                        var newTitle = faker.Name.Prefix();
-                        while (string.Equals(newTitle, old, StringComparison.Ordinal))
-                        {
-                            newTitle = faker.Name.Prefix();
-                        }
-                        Title = newTitle;
-                        newValue = Title;
+                        newValue = faker.Name.Prefix();
+                        while (newValue == old)
+                            newValue = faker.Name.Prefix();
                         break;
                     }
 
                 case 1:
                     {
-                        var newFirst = faker.Name.FirstName();
-                        while (string.Equals(newFirst, old, StringComparison.Ordinal))
-                        {
-                            newFirst = faker.Name.FirstName();
-                        }
-                        FirstName = newFirst;
-                        newValue = FirstName;
+                        newValue = faker.Name.FirstName();
+                        while (newValue == old)
+                            newValue = faker.Name.FirstName();
                         break;
                     }
 
                 case 2:
                     {
-                        var newLast = faker.Name.LastName();
-                        while (string.Equals(newLast, old, StringComparison.Ordinal))
-                        {
-                            newLast = faker.Name.LastName();
-                        }
-                        LastName = newLast;
-                        newValue = LastName;
+                        newValue = faker.Name.LastName();
+                        while (newValue == old)
+                            newValue = faker.Name.LastName();
                         break;
                     }
 
                 case 3:
                     {
-                        var newEmail = faker.Internet.Email();
-                        while (string.Equals(newEmail, old, StringComparison.OrdinalIgnoreCase))
-                        {
-                            newEmail = faker.Internet.Email();
-                        }
-                        Email = newEmail;
-                        newValue = Email;
+                        newValue = faker.Internet.Email();
+                        while (string.Equals(newValue, old, StringComparison.OrdinalIgnoreCase))
+                            newValue = faker.Internet.Email();
                         break;
                     }
 
                 case 4:
                     {
-                        var newPhone = faker.Phone.PhoneNumber();
-                        while (string.Equals(newPhone, old, StringComparison.Ordinal))
-                        {
-                            newPhone = faker.Phone.PhoneNumber();
-                        }
-                        Phone = newPhone;
-                        newValue = Phone;
+                        newValue = faker.Phone.PhoneNumber();
+                        while (newValue == old)
+                            newValue = faker.Phone.PhoneNumber();
                         break;
                     }
 
                 case 5:
                     {
-                        var newGender = faker.PickRandom(new[] { "Male", "Female", "Other" });
-                        while (string.Equals(newGender, old, StringComparison.Ordinal))
-                        {
-                            newGender = faker.PickRandom(new[] { "Male", "Female", "Other" });
-                        }
-                        Gender = newGender;
-                        newValue = Gender;
+                        newValue = faker.PickRandom(new[] { "Male", "Female", "Other" });
+                        while (newValue == old)
+                            newValue = faker.PickRandom(new[] { "Male", "Female", "Other" });
                         break;
                     }
 
                 case 6:
                     {
-                        var newAge = faker.Random.Int(18, 80);
-                        while (string.Equals(newAge.ToString(), old, StringComparison.Ordinal))
-                        {
+                        int newAge = faker.Random.Int(18, 80);
+                        while (newAge.ToString() == old)
                             newAge = faker.Random.Int(18, 80);
-                        }
-                        Age = newAge;
-                        //change by nemal nikdy byť null
-                        newValue = Age.ToString();
+
+                        newValue = newAge.ToString();
                         break;
                     }
 
                 case 7:
                     {
-                        var newCompany = faker.Company.CompanyName();
-                        while (string.Equals(newCompany, old, StringComparison.Ordinal))
-                        {
-                            newCompany = faker.Company.CompanyName();
-                        }
-                        Company = newCompany;
-                        newValue = Company;
+                        newValue = faker.Company.CompanyName();
+                        while (newValue == old)
+                            newValue = faker.Company.CompanyName();
                         break;
                     }
 
                 case 8:
                     {
-                        var newJob = faker.Name.JobTitle();
-                        while (string.Equals(newJob, old, StringComparison.Ordinal))
-                        {
-                            newJob = faker.Name.JobTitle();
-                        }
-                        JobTitle = newJob;
-                        newValue = JobTitle;
+                        newValue = faker.Name.JobTitle();
+                        while (newValue == old)
+                            newValue = faker.Name.JobTitle();
                         break;
                     }
 
                 case 9:
                     {
-                        var newCard = faker.Finance.CreditCardNumber();
-                        while (string.Equals(newCard, old, StringComparison.Ordinal))
-                        {
-                            newCard = faker.Finance.CreditCardNumber();
-                        }
-                        CreditCardNumber = newCard;
-                        newValue = CreditCardNumber;
+                        newValue = faker.Finance.CreditCardNumber();
+                        while (newValue == old)
+                            newValue = faker.Finance.CreditCardNumber();
                         break;
                     }
 
                 case 10:
                     {
-                        var newStreet = faker.Address.StreetName();
-                        while (string.Equals(newStreet, old, StringComparison.Ordinal))
-                        {
-                            newStreet = faker.Address.StreetName();
-                        }
-                        Street = newStreet;
-                        newValue = Street;
+                        newValue = faker.Address.StreetName();
+                        while (newValue == old)
+                            newValue = faker.Address.StreetName();
                         break;
                     }
 
                 case 11:
                     {
-                        var newStreetNumber = faker.Address.SecondaryAddress();
-                        while (string.Equals(newStreetNumber, old, StringComparison.Ordinal))
-                        {
-                            newStreetNumber = faker.Address.SecondaryAddress();
-                        }
-                        StreetNumber = newStreetNumber;
-                        newValue = StreetNumber;
+                        newValue = faker.Address.SecondaryAddress();
+                        while (newValue == old)
+                            newValue = faker.Address.SecondaryAddress();
                         break;
                     }
 
                 case 12:
                     {
-                        var newCity = faker.Address.City();
-                        while (string.Equals(newCity, old, StringComparison.Ordinal))
-                        {
-                            newCity = faker.Address.City();
-                        }
-                        City = newCity;
-                        newValue = City;
+                        newValue = faker.Address.City();
+                        while (newValue == old)
+                            newValue = faker.Address.City();
                         break;
                     }
 
                 case 13:
                     {
-                        var newCounty = faker.Address.County();
-                        while (string.Equals(newCounty, old, StringComparison.Ordinal))
-                        {
-                            newCounty = faker.Address.County();
-                        }
-                        County = newCounty;
-                        newValue = County;
+                        newValue = faker.Address.County();
+                        while (newValue == old)
+                            newValue = faker.Address.County();
                         break;
                     }
 
                 case 14:
                     {
-                        var newState = faker.Address.State();
-                        while (string.Equals(newState, old, StringComparison.Ordinal))
-                        {
-                            newState = faker.Address.State();
-                        }
-                        State = newState;
-                        newValue = State;
+                        newValue = faker.Address.State();
+                        while (newValue == old)
+                            newValue = faker.Address.State();
                         break;
                     }
 
                 case 15:
                     {
-                        var newZip = faker.Address.ZipCode();
-                        while (string.Equals(newZip, old, StringComparison.Ordinal))
-                        {
-                            newZip = faker.Address.ZipCode();
-                        }
-                        ZipCode = newZip;
-                        newValue = ZipCode;
+                        newValue = faker.Address.ZipCode();
+                        while (newValue == old)
+                            newValue = faker.Address.ZipCode();
                         break;
                     }
 
                 case 16:
                     {
-                        var newCountry = faker.Address.Country();
-                        while (string.Equals(newCountry, old, StringComparison.Ordinal))
-                        {
-                            newCountry = faker.Address.Country();
-                        }
-                        Country = newCountry;
-                        newValue = Country;
+                        newValue = faker.Address.Country();
+                        while (newValue == old)
+                            newValue = faker.Address.Country();
                         break;
                     }
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i), i, "Invalid attribute index");
             }
+            SetAttribute(i, newValue);
 
-            Console.WriteLine($"     Changed attribute: '{GetAttributeName(i)}' from '{old}' to '{newValue}'");
-
-            // Neozaj by nemalo byt null
+            Console.WriteLine($"    Changed attribute: '{GetAttributeName(i)}' from '{old}' to '{newValue}'");
             return newValue;
         }
 

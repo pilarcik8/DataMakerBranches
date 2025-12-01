@@ -67,7 +67,7 @@ namespace TestKniznice
                 }
                 else if (actionL == AtributeAction.KEEP)
                 {
-                    Console.WriteLine($"\n {i + 1}.R + B action:");
+                    Console.WriteLine($"\n{i + 1}. R + B action:");
                     ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);
                 }
             }
@@ -100,16 +100,9 @@ namespace TestKniznice
 
             else if (action == AtributeAction.ADD)
             {
+                Console.WriteLine($"    Added new attribute after: '{branchPerson.GetAttributeName(i)}'");
                 // potrebujem pridat novy atribut do triedy pred tento atribut (aspon nastavit aby sa ulozil do xml ked ho expornem)
             }
-        }
-
-        // Mozu byt bud identicke alebo aspon jeden z nich musi byt KEEP
-        private static AtributeAction GetBaseWinningAcion(AtributeAction actionR, AtributeAction actionL)
-        {
-            if (actionL == AtributeAction.KEEP)
-                return actionR;
-            return actionL;
         }
 
         public static AtributeAction GetAtributeAction()
