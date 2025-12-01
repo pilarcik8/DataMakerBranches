@@ -29,196 +29,79 @@ namespace TestKniznice
             Person rightPerson = resultPerson.Clone();
             Person basePeson = resultPerson.Clone();
 
-            var properties = typeof(Person).GetProperties();
-            int atCount = properties.Length;
-            Stack<AtributeAction> RightAtributeActions = new Stack<AtributeAction>(atCount);
-            Stack<AtributeAction> LeftAtributeActions = new Stack<AtributeAction>(atCount);
-            Stack<AtributeAction> BaseAtributeActions = new Stack<AtributeAction>(atCount);
+            int atCount = typeof(Person).GetProperties().Length;
 
-            // Logs to be written to txt files
-            var rightLog = new List<string>();
-            var leftLog = new List<string>();
-            var baseLog = new List<string>();
+            // Pre vasciu diferenciaciu r a l branchov pocas generovania
+            double leftKeepProbability = Random.Shared.NextDouble() * 0.6 + 0.2; // [0.2, 0.8]
+            double rightKeepProbability = 1.0 - leftKeepProbability;
+            Console.WriteLine($"Left KEEP probability: {leftKeepProbability:P0}, Right KEEP probability: {rightKeepProbability:P0}");
 
             for (int i = 0; i < atCount; i++)
             {
                 // Generovanie akcii pre pravy a lavy branch
                 AtributeAction actionR, actionL;
-                if (i % 2 == 0)
+                bool leftIsKeep = Random.Shared.NextDouble() < leftKeepProbability;
+
+                if (leftIsKeep)
                 {
+                    actionL = AtributeAction.KEEP;
                     actionR = GetAtributeAction();
-                    actionL = GetAtributeActionWitourConfilct(actionR);
                 }
                 else
                 {
-
                     actionL = GetAtributeAction();
-                    actionR = GetAtributeActionWitourConfilct(actionL);
+                    actionR = AtributeAction.KEEP;
+
                 }
 
-                //ulozenie akcii do stacku
-                AtributeAction actionB = GetBaseWinningAcion(actionR, actionL);
-
-                RightAtributeActions.Push(actionR);
-                LeftAtributeActions.Push(actionL);
-                BaseAtributeActions.Push(actionB);
-
-                //prebehnutie zmien v triedach
-                string? rightChange = null;
-                string? leftChange = null;
-                string? sameChange = null;
-
-                var propName = properties[i].Name;
-
-                //zmeni pre L a R
-                if (actionR != actionL)
+                if (actionR == AtributeAction.KEEP && actionL == AtributeAction.KEEP)
                 {
-                    //jedna z akcii je KEEP
-                    Console.WriteLine($"Right action");
-                    var oldRight = properties[i].GetValue(rightPerson);
-                    rightChange = ExecuteAction(rightPerson, i, actionR, faker);
-                    if (rightChange != null)
-                        rightLog.Add($"{propName}: '{oldRight ?? "<null>"}' -> '{rightChange}'");
-
-                    Console.WriteLine($"Left action");
-                    var oldLeft = properties[i].GetValue(leftPerson);
-                    leftChange = ExecuteAction(leftPerson, i, actionL, faker);
-                    if (leftChange != null)
-                        leftLog.Add($"{propName}: '{oldLeft ?? "<null>"}' -> '{leftChange}'");
+                    Console.WriteLine($"\n{i + 1}. R + L + B action:");
+                    // nezalezi ktory branch sa vyberie, lebo oba maju KEEP
+                    ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);
                 }
-                else
+                else if (actionR == AtributeAction.KEEP)
                 {
-                    Console.WriteLine($"Both action");
-                    var oldRight = properties[i].GetValue(rightPerson);
-                    var oldLeft = properties[i].GetValue(leftPerson);
-                    sameChange = ExecuteSameAction(rightPerson, leftPerson, i, actionR, faker);
-                    if (sameChange != null)
-                    {
-                        rightLog.Add($"{propName}: '{oldRight ?? "<null>"}' -> '{sameChange}'");
-                        leftLog.Add($"{propName}: '{oldLeft ?? "<null>"}' -> '{sameChange}'");
-                    }
+                    Console.WriteLine($"\n{i + 1}. L + B action:");
+                    ExecuteSameAction(leftPerson, basePeson, i, actionL, faker);
                 }
-
-                // zmena pre B
-                Console.WriteLine($"Base action");
-                if (actionB == AtributeAction.KEEP)
+                else if (actionL == AtributeAction.KEEP)
                 {
-                    // nothing to do
+                    Console.WriteLine($"\n {i + 1}.R + B action:");
+                    ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);
                 }
-                else if (actionB == AtributeAction.CHANGE)
-                {
-                    // Determine which branch's change to apply to base
-                    string? valueToApply = null;
-
-                    if (actionR == actionB && rightChange != null)
-                        valueToApply = rightChange;
-                    else if (actionL == actionB && leftChange != null)
-                        valueToApply = leftChange;
-                    else if (actionR == actionL && sameChange != null)
-                        valueToApply = sameChange;
-
-                    var oldBase = properties[i].GetValue(basePeson);
-
-                    if (valueToApply != null)
-                    {
-                        basePeson.SetAttribute(i, valueToApply);
-                        baseLog.Add($"{propName}: '{oldBase ?? "<null>"}' -> '{valueToApply}'");
-                    }
-                    else
-                    {
-                        // fallback: if no change value captured, perform a change on base and log it
-                        var newBase = basePeson.ChangeAttribute(i, faker);
-                        baseLog.Add($"{propName}: '{oldBase ?? "<null>"}' -> '{newBase}'");
-                    }
-                }
-                else if (actionB == AtributeAction.REMOVE)
-                {
-                    // TODO: implement remove behavior
-                }
-                else if (actionB == AtributeAction.ADD)
-                {
-                    // TODO: implement add behavior
-                }
-
-                //TODO: base ma mat akciu, ktora je identicka s jednou z branchov
             }
-
+            Console.WriteLine();
             ExportPerson(resultPerson, "res");
             ExportPerson(rightPerson, "right");
             ExportPerson(leftPerson, "left");
             ExportPerson(basePeson, "base");
-
-            // Save change logs
-            try
-            {
-                string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\..\"));
-                string outputDir = Path.Combine(projectDir, "createdFiles");
-                Directory.CreateDirectory(outputDir);
-
-                File.WriteAllLines(Path.Combine(outputDir, "changes_right.txt"), rightLog);
-                File.WriteAllLines(Path.Combine(outputDir, "changes_left.txt"), leftLog);
-                File.WriteAllLines(Path.Combine(outputDir, "changes_base.txt"), baseLog);
-
-                Console.WriteLine($"Change logs saved to: {outputDir}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error writing change logs: {ex.Message}");
-            }
         }
 
-        private static string? ExecuteSameAction(Person rightPerson, Person leftPerson, int i, AtributeAction action, Faker faker)
+        private static void ExecuteSameAction(Person branchPerson, Person basePerson, int i, AtributeAction action, Faker faker)
         {
             if (action == AtributeAction.KEEP)
-                return null;
+            {
+                Console.WriteLine($"    Kept attribute: '{branchPerson.GetAttributeName(i)}'");
+                return;
 
+            }
             else if (action == AtributeAction.CHANGE)
             {
-                // change right, copy to left and return the new value so base can reuse it
-                string change = rightPerson.ChangeAttribute(i, faker);
-                leftPerson.SetAttribute(i, change);
-                return change;
+                string change = branchPerson.ChangeAttribute(i, faker);
+                basePerson.SetAttribute(i, change);
             }
-
             else if (action == AtributeAction.REMOVE)
             {
-                // potrebujem odstranit dany atribut z triedy (aspon nastavit aby sa neulozil do xml ked ho expornem)
-                return null;
+                Console.WriteLine($"    Removed attribute: '{branchPerson.GetAttributeName(i)}'");
+                branchPerson.RemoveAtribute(i);
+                basePerson.RemoveAtribute(i);
             }
 
             else if (action == AtributeAction.ADD)
             {
                 // potrebujem pridat novy atribut do triedy pred tento atribut (aspon nastavit aby sa ulozil do xml ked ho expornem)
-                return null;
             }
-
-            return null;
-        }
-
-        private static string? ExecuteAction(Person person, int i, AtributeAction action, Faker faker)
-        {
-            if (action == AtributeAction.KEEP)
-                return null;
-
-            else if (action == AtributeAction.CHANGE)
-            {
-                // return new value so caller can propagate it to base when needed
-                return person.ChangeAttribute(i, faker);
-            }
-
-            else if (action == AtributeAction.REMOVE)
-            {
-                // potrebujem odstranit dany atribut z triedy (aspon nastavit aby sa neulozil do xml ked ho expornem)
-                return null;
-            }
-
-            else if (action == AtributeAction.ADD)
-            {
-                // potrebujem pridat novy atribut do triedy pred tento atribut (aspon nastavit aby sa ulozil do xml ked ho expornem)
-                return null;
-            }
-
-            return null;
         }
 
         // Mozu byt bud identicke alebo aspon jeden z nich musi byt KEEP
@@ -227,15 +110,6 @@ namespace TestKniznice
             if (actionL == AtributeAction.KEEP)
                 return actionR;
             return actionL;
-        }
-
-        // Ak je RIGHT KEEP, tak L moze byt hocico, inak L je KEEP alebo identicke s R
-        private static AtributeAction GetAtributeActionWitourConfilct(AtributeAction actionR)
-        {
-            if (actionR == AtributeAction.KEEP)
-                return GetAtributeAction();
-
-            return Random.Shared.Next(2) == 0 ? AtributeAction.KEEP : actionR;
         }
 
         public static AtributeAction GetAtributeAction()
