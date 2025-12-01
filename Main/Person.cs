@@ -1,36 +1,56 @@
-﻿using System;
+﻿using Bogus;
+using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-using System;
-using Bogus;
-
 namespace TestKniznice
 {
+    // Cely Person.cs zalezi na tom aby sa nemenili tieto atributy a ich indexy
+    // Kazdy druhy atribut je aby sa pocas runntimu dal "pridat" novy atribut (nastaveny na null == neexistuje pre xml)
     public class Person
     {
         public string? Title { get; set; } //0
+        private string? Iban;
         public string? FirstName { get; set; } //1
+        private string? FavouriteColor;
+
         public string? LastName { get; set; } //2
+        private string? BitcoinAddress;
 
         public string? Email { get; set; } //3
+        private string? EmailUserName;
         public string? Phone { get; set; } //4
+        private string? PhoneExtension;
 
         public string? Gender { get; set; }  //5
+        private string? FavouriteWord;
         public int? Age { get; set; } //6
+        private string? FavouriteMusicGenre;
         public string? Company { get; set; } //7
+        private string? CompanyCatchPhrase;
         public string? JobTitle { get; set; } //8
+        private string? JobDescriptor;
 
         public string? CreditCardNumber { get; set; } //9
+        private string? CreditAccount;
         public string? Street { get; set; } //10
-        public string? StreetNumber { get; set; } //11
+        private string? StreetSuffix;
+        public string? StreetNumber { get; set; }
+        private string? BuildingNumber;
         public string? City { get; set; } //12
+        private string? CityPrefix;
         public string? County { get; set; } //13
+        private string? CountyCode;
         public string? State { get; set; } //14
+        private string? StateAbbr;
         public string? ZipCode { get; set; } //15
+        private string? ZipPlus4;
         public string? Country { get; set; } //16
+        private string? CountryCode;
 
         public Person()
         {
@@ -51,12 +71,149 @@ namespace TestKniznice
             State = string.Empty;
             ZipCode = string.Empty;
             Country = string.Empty;
+
+            Iban = null;
+            FavouriteColor = null;
+            BitcoinAddress = null;
+            EmailUserName = null;
+            PhoneExtension = null;
+            FavouriteWord = null;
+            FavouriteMusicGenre = null;
+            CompanyCatchPhrase = null;
+            JobDescriptor = null;
+            CreditAccount = null;
+            StreetSuffix = null;
+            BuildingNumber = null;
+            CityPrefix = null;
+            CountyCode = null;
+            StateAbbr = null;
+            ZipPlus4 = null;
+            CountryCode = null;
         }
 
+        public string AddAttribute(int i, Faker faker, string preGeneratedValue = "")
+        {
+            string value = "";
+            string name = "";
+
+            // Použi už predgenerovanú hodnotu, ak existuje
+            bool hasPreGen = !string.IsNullOrWhiteSpace(preGeneratedValue);
+
+            switch (i)
+            {
+                case 0:
+                    value = hasPreGen ? preGeneratedValue : faker.Finance.Iban();
+                    this.Iban = value;
+                    name = nameof(Iban);
+                    break;
+
+                case 1:
+                    value = hasPreGen ? preGeneratedValue : faker.Commerce.Color();
+                    this.FavouriteColor = value;
+                    name = nameof(FavouriteColor);
+                    break;
+
+                case 2:
+                    value = hasPreGen ? preGeneratedValue : faker.Finance.BitcoinAddress();
+                    this.BitcoinAddress = value;
+                    name = nameof(BitcoinAddress);
+                    break;
+
+                case 3:
+                    value = hasPreGen ? preGeneratedValue : faker.Internet.UserName();
+                    this.EmailUserName = value;
+                    name = nameof(EmailUserName);
+                    break;
+
+                case 4:
+                    value = hasPreGen ? preGeneratedValue : faker.Random.AlphaNumeric(8);
+                    this.PhoneExtension = value;
+                    name = nameof(PhoneExtension);
+                    break;
+
+                case 5:
+                    value = hasPreGen ? preGeneratedValue : faker.Random.Word();
+                    this.FavouriteWord = value;
+                    name = nameof(FavouriteWord);
+                    break;
+
+                case 6:
+                    value = hasPreGen ? preGeneratedValue : faker.Music.Genre();
+                    this.FavouriteMusicGenre = value;
+                    name = nameof(FavouriteMusicGenre);
+                    break;
+
+                case 7:
+                    value = hasPreGen ? preGeneratedValue : faker.Company.CatchPhrase();
+                    this.CompanyCatchPhrase = value;
+                    name = nameof(CompanyCatchPhrase);
+                    break;
+
+                case 8:
+                    value = hasPreGen ? preGeneratedValue : faker.Hacker.Phrase();
+                    this.JobDescriptor = value;
+                    name = nameof(JobDescriptor);
+                    break;
+
+                case 9:
+                    value = hasPreGen ? preGeneratedValue : faker.Finance.Account();
+                    this.CreditAccount = value;
+                    name = nameof(CreditAccount);
+                    break;
+
+                case 10:
+                    value = hasPreGen ? preGeneratedValue : faker.Address.StreetSuffix();
+                    this.StreetSuffix = value;
+                    name = nameof(StreetSuffix);
+                    break;
+
+                case 11:
+                    value = hasPreGen ? preGeneratedValue : faker.Address.BuildingNumber();
+                    this.BuildingNumber = value;
+                    name = nameof(BuildingNumber);
+                    break;
+
+                case 12:
+                    value = hasPreGen ? preGeneratedValue : faker.Address.CityPrefix();
+                    this.CityPrefix = value;
+                    name = nameof(CityPrefix);
+                    break;
+
+                case 13:
+                    value = hasPreGen ? preGeneratedValue : faker.Random.AlphaNumeric(5);
+                    this.CountyCode = value;
+                    name = nameof(CountyCode);
+                    break;
+
+                case 14:
+                    value = hasPreGen ? preGeneratedValue : faker.Address.StateAbbr();
+                    this.StateAbbr = value;
+                    name = nameof(StateAbbr);
+                    break;
+
+                case 15:
+                    value = hasPreGen ? preGeneratedValue : faker.Random.Number(1000, 9999).ToString();
+                    this.ZipPlus4 = value;
+                    name = nameof(ZipPlus4);
+                    break;
+
+                case 16:
+                    value = hasPreGen ? preGeneratedValue : faker.Address.CountryCode();
+                    this.CountryCode = value;
+                    name = nameof(CountryCode);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(i), i, "Invalid attribute index");
+            }
+
+            var valueAndName = $"{value}|{name}";
+            return valueAndName;
+        }
+
+        // Vrati hodnotu atributu po jeho zmene, aby sa dala nastavit aj do druhehej osoby
         public string ChangeAttribute(int i, Faker faker)
         {
-            if (faker == null) throw new ArgumentNullException(nameof(faker));
-
             var old = GetAttribute(i);
             string newValue;
 
