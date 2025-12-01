@@ -20,16 +20,29 @@ namespace TestKniznice
 
     public static class Program
     {
+        static int MadeChanges;
+        static int MadeRemovals;
+        static int MadeAdditions;
+
         // Nastavenia generovania
-        const int ITERATIONS = 10;
+        const int ITERATIONS = 1;
+
         const bool ALLOW_CHANGE = true;
         const bool ALLOW_REMOVE = true;
         const bool ALLOW_ADD = true;
 
+        const int MAX_ALLOWED_CHANGES = int.MaxValue;
+        const int MAX_ALLOWED_REMOVALS = int.MaxValue;
+        const int MAX_ALLOWED_ADDITIONS = int.MaxValue;
+
         public static void Main()
         {
             // Generovanie testovacich dat
-            var iterations = ITERATIONS - 1;
+            var iterations = ITERATIONS;
+            MadeChanges = 0;
+            MadeRemovals = 0;
+            MadeAdditions = 0;
+
             for (int j = 0; j < iterations; j++) {
             // Vytvorenie vyslednej osoby
             var faker = new Faker("en");
@@ -66,9 +79,10 @@ namespace TestKniznice
 
                 if (actionR == AtributeAction.KEEP && actionL == AtributeAction.KEEP)
                 {
+                    /*
                     Console.WriteLine($"\n{i + 1}. R + L + B action:");
                     // nezalezi ktory branch sa vyberie, lebo oba maju KEEP
-                    ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);
+                    ExecuteSameAction(rightPerson, basePeson, i, actionR, faker);*/
                 }
                 else if (actionR == AtributeAction.KEEP)
                 {
@@ -82,7 +96,7 @@ namespace TestKniznice
                 }
             }
             Console.WriteLine();
-            ExportPerson(resultPerson, "res", j);
+            ExportPerson(resultPerson, "result", j);
             ExportPerson(rightPerson, "right", j);
             ExportPerson(leftPerson, "left", j);
             ExportPerson(basePeson, "base", j);
@@ -121,37 +135,43 @@ namespace TestKniznice
             }
         }
 
+        // Ak su vsetky vycerpane alebo vypnute, vrati KEEP
+        // Rekurziva
         public static AtributeAction GetAtributeAction()
         {
-            int randomValue = new Random().Next(3);
+            int randomValue = new Random().Next(4);
 
-            switch(randomValue)
+            switch (randomValue)
             {
                 case 0:
                     return AtributeAction.KEEP;
 
                 case 1:
-                    if (ALLOW_CHANGE)
+                    if (ALLOW_CHANGE && MAX_ALLOWED_CHANGES > MadeChanges)
+                    {
+                        MadeChanges++;
                         return AtributeAction.CHANGE;
-                    else
-                        return GetAtributeAction();
+                    }
+                    return GetAtributeAction();
 
                 case 2:
-                    if (ALLOW_REMOVE)
+                    if (ALLOW_REMOVE && MAX_ALLOWED_REMOVALS > MadeRemovals)
+                    {
+                        MadeRemovals++;
                         return AtributeAction.REMOVE;
-                    else
-                        return GetAtributeAction();
+                    }
+                    return GetAtributeAction();
 
                 case 3:
-                    if (ALLOW_ADD)
+                    if (ALLOW_ADD && MAX_ALLOWED_ADDITIONS > MadeAdditions)
+                    {
+                        MadeAdditions++;
                         return AtributeAction.ADD;
-                    else
-                        return GetAtributeAction();
+                    }
+                    return GetAtributeAction();
             }
-
-            return (AtributeAction)new Random().Next(4);
+            return GetAtributeAction();
         }
-
 
         private static Person CreateFakePerson(Faker faker)
         {

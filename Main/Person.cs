@@ -13,44 +13,58 @@ namespace TestKniznice
     // Kazdy druhy atribut je aby sa pocas runntimu dal "pridat" novy atribut (nastaveny na null == neexistuje pre xml)
     public class Person
     {
-        public string? Title { get; set; } //0
         private string? Iban;
-        public string? FirstName { get; set; } //1
+        public string? Title { get; set; } //0
+        /*---------------------------------------*/
         private string? FavouriteColor;
-
+        public string? FirstName { get; set; } //1
+        /*---------------------------------------*/
+        public string? BitcoinAddress;
         public string? LastName { get; set; } //2
-        private string? BitcoinAddress;
-
+        /*---------------------------------------*/
+        public string? EmailUserName;
         public string? Email { get; set; } //3
-        private string? EmailUserName;
+        /*---------------------------------------*/
+
         public string? Phone { get; set; } //4
-        private string? PhoneExtension;
-
+        public string? PhoneExtension;
+        /*---------------------------------------*/
+        public string? FavouriteWord;
         public string? Gender { get; set; }  //5
-        private string? FavouriteWord;
+        /*---------------------------------------*/
+        public string? FavouriteMusicGenre;
         public int? Age { get; set; } //6
-        private string? FavouriteMusicGenre;
+        /*---------------------------------------*/
+        public string? CompanyCatchPhrase;
         public string? Company { get; set; } //7
-        private string? CompanyCatchPhrase;
+        /*---------------------------------------*/
+        public string? JobDescriptor;
         public string? JobTitle { get; set; } //8
-        private string? JobDescriptor;
-
+        /*---------------------------------------*/
+        public string? CreditAccount;
         public string? CreditCardNumber { get; set; } //9
-        private string? CreditAccount;
+        /*---------------------------------------*/
+        public string? StreetSuffix;
         public string? Street { get; set; } //10
-        private string? StreetSuffix;
+        /*---------------------------------------*/
+        public string? BuildingNumber;
         public string? StreetNumber { get; set; }
-        private string? BuildingNumber;
+        /*---------------------------------------*/
+        public string? CityPrefix;
         public string? City { get; set; } //12
-        private string? CityPrefix;
+        /*---------------------------------------*/
+        public string? CountyCode;
         public string? County { get; set; } //13
-        private string? CountyCode;
+        /*---------------------------------------*/
+
         public string? State { get; set; } //14
-        private string? StateAbbr;
+        public string? StateAbbr;
+        /*---------------------------------------*/
+        public string? ZipPlus4;
         public string? ZipCode { get; set; } //15
-        private string? ZipPlus4;
+        /*---------------------------------------*/
+        public string? CountryCode;
         public string? Country { get; set; } //16
-        private string? CountryCode;
 
         public Person()
         {
@@ -405,105 +419,38 @@ namespace TestKniznice
 
             switch (i)
             {
-                case 0:
-                    {
-                        Title = value;
-                        break;
-                    }
-                case 1:
-                    {
-                        FirstName = value;
-                        break;
-                    }
-                case 2:
-                    {
-                        LastName = value;
-                        break;
-                    }
-                case 3:
-                    {
-                        Email = value;
-                        break;
-                    }
-                case 4:
-                    {
-                        Phone = value;
-                        break;
-                    }
-                case 5:
-                    {
-                        Gender = value;
-                        break;
-                    }
-                case 6:
-                    {
-                        if (value == null)
-                        {
-                            Age = null;
-                            break;
-                        }
+                case 0: Title = value; break;
+                case 1: FirstName = value; break;
+                case 2: LastName = value; break;
+                case 3: Email = value; break;
+                case 4: Phone = value; break;
+                case 5: Gender = value; break;
+                case 6: Age = ParseNullableInt(value, "Age"); break;
+                case 7: Company = value; break;
+                case 8: JobTitle = value; break;
+                case 9: CreditCardNumber = value; break;
+                case 10: Street = value; break;
+                case 11: StreetNumber = value; break;
+                case 12: City = value; break;
+                case 13: County = value; break;
+                case 14: State = value; break;
+                case 15: ZipCode = value; break;
+                case 16: Country = value; break;
 
-                        if (!int.TryParse(value, out var parsedAge))
-                            throw new FormatException($"Cannot parse Age from '{value}'.");
-                        Age = parsedAge;
-                        break;
-                    }
-                case 7:
-                    {
-                        Company = value;
-                        break;
-                    }
-                case 8:
-                    {
-                        JobTitle = value;
-                        break;
-                    }
-                case 9:
-                    {
-                        CreditCardNumber = value;
-                        break;
-                    }
-                case 10:
-                    {
-                        Street = value;
-                        break;
-                    }
-                case 11:
-                    {
-                        StreetNumber = value;
-                        break;
-                    }
-                case 12:
-                    {
-                        City = value;
-                        break;
-                    }
-                case 13:
-                    {
-                        County = value;
-                        break;
-                    }
-                case 14:
-                    {
-                        State = value;
-                        break;
-                    }
-                case 15:
-                    {
-                        ZipCode = value;
-                        break;
-                    }
-                case 16:
-                    {
-                        Country = value;
-                        break;
-                    }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i), i, "Invalid attribute index");
             }
 
-            //Console.WriteLine($"'{name}' set: '{old}' -> '{value}'");
+            int? ParseNullableInt(string input, string fieldName)
+            {
+                if (input == null)
+                    return null;
 
+                if (!int.TryParse(input, out var result))
+                    throw new FormatException($"Cannot parse {fieldName} from '{input}'.");
+
+                return result;
+            }
         }
 
         public string GetAttributeName(int i)
