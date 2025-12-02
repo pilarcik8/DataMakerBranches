@@ -52,9 +52,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Source\\Repos\\DataMakerBranches\\Main\\Main.csproj",
-      "projectName": "Main",
-      "projectPath": "C:\\Users\\Admin\\Source\\Repos\\DataMakerBranches\\Main\\Main.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Source\\Repos\\DataMakerBranches\\Main\\PersonMaker.csproj",
+      "projectName": "PersonMaker",
+      "projectPath": "C:\\Users\\Admin\\Source\\Repos\\DataMakerBranches\\Main\\PersonMaker.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Admin\\Source\\Repos\\DataMakerBranches\\Main\\obj\\",
       "projectStyle": "PackageReference",
