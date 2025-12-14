@@ -1,50 +1,47 @@
 ﻿Left, Right and Base:
 Kept attribute: 'Title'
 
+Left, Right and Base:
+Kept attribute: 'FirstName'
+
+Left, Right and Base:
+Kept attribute: 'LastName'
+
+Left, Right and Base:
+Kept attribute: 'Email'
+
 Right and Base:
-Added new attribute before attribute 'FirstName': named 'FavouriteColor' with value 'salmon'
-
-Left and Base:
-Added new attribute before attribute 'LastName': named 'BitcoinAddress' with value '1TtcnYir4NdyLheuj1BUgqs2x7fkJb'
+Changed attribute: 'Phone' from '1-371-550-0905 x189' to '291-981-7100 x30100'
 
 Right and Base:
-Added new attribute before attribute 'Email': named 'EmailUserName' with value 'Katelyn.DAmore'
-
-Right and Base:
-Removed attribute: 'Phone'
-
-Left and Base:
 Removed attribute: 'Gender'
 
 Right and Base:
-Removed attribute: 'Age'
-
-Left, Right and Base:
-Kept attribute: 'Company'
+Added new attribute before attribute 'StreetNumber': named 'FavouriteMusicGenre' with value 'Rap'
 
 Right and Base:
-Added new attribute before attribute 'JobTitle': named 'JobDescriptor' with value 'The JSON system is down, bypass the haptic system so we can bypass the JSON system!'
-
-Left and Base:
-Added new attribute before attribute 'CreditCardNumber': named 'CreditAccount' with value '46726477'
-
-Left and Base:
-Changed attribute: 'Street' from 'Wyman Rest' to 'Sipes Rue'
+Changed attribute: 'Company' from 'Walsh Group' to 'Doyle - Raynor'
 
 Right and Base:
-Removed attribute: 'StreetNumber'
+Removed attribute: 'JobTitle'
 
-Left and Base:
+Right and Base:
+Removed attribute: 'CreditCardNumber'
+
+Right and Base:
+Removed attribute: 'Street'
+
+Right and Base:
 Removed attribute: 'City'
 
-Right and Base:
-Changed attribute: 'County' from 'Avon' to 'Buckinghamshire'
+Left, Right and Base:
+Kept attribute: 'County'
 
-Left and Base:
+Right and Base:
 Removed attribute: 'State'
 
 Right and Base:
-Removed attribute: 'ZipCode'
+Added new attribute before attribute 'ZipCode': named 'ZipPlus4' with value '8619'
 
 Left, Right and Base:
 Kept attribute: 'Country'

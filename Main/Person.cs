@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using System;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -25,15 +24,15 @@ namespace TestKniznice
         public string? EmailUserName;
         public string? Email { get; set; } //3
         /*---------------------------------------*/
-
-        public string? Phone { get; set; } //4
         public string? PhoneExtension;
+        public string? Phone { get; set; } //4
         /*---------------------------------------*/
         public string? FavouriteWord;
         public string? Gender { get; set; }  //5
         /*---------------------------------------*/
         public string? FavouriteMusicGenre;
-        public int? Age { get; set; } //6
+        public string? StreetNumber { get; set; } //6
+
         /*---------------------------------------*/
         public string? CompanyCatchPhrase;
         public string? Company { get; set; } //7
@@ -47,24 +46,21 @@ namespace TestKniznice
         public string? StreetSuffix;
         public string? Street { get; set; } //10
         /*---------------------------------------*/
-        public int? BuildingNumber;
-        public string? StreetNumber { get; set; }
-        /*---------------------------------------*/
         public string? CityPrefix;
-        public string? City { get; set; } //12
+        public string? City { get; set; } //11
         /*---------------------------------------*/
         public string? CountyCode;
-        public string? County { get; set; } //13
+        public string? County { get; set; } //12
         /*---------------------------------------*/
 
-        public string? State { get; set; } //14
+        public string? State { get; set; } //13
         public string? StateAbbr;
         /*---------------------------------------*/
         public string? ZipPlus4;
-        public string? ZipCode { get; set; } //15
+        public string? ZipCode { get; set; } //14
         /*---------------------------------------*/
         public string? CountryCode;
-        public string? Country { get; set; } //16
+        public string? Country { get; set; } //15
 
         public Person()
         {
@@ -74,7 +70,6 @@ namespace TestKniznice
             Email = string.Empty;
             Phone = string.Empty;
             Gender = string.Empty;
-            Age = 0;
             Company = string.Empty;
             JobTitle = string.Empty;
             CreditCardNumber = string.Empty;
@@ -97,7 +92,6 @@ namespace TestKniznice
             JobDescriptor = null;
             CreditAccount = null;
             StreetSuffix = null;
-            BuildingNumber = null;
             CityPrefix = null;
             CountyCode = null;
             StateAbbr = null;
@@ -182,36 +176,30 @@ namespace TestKniznice
                     break;
 
                 case 11:
-                    value = hasPreGen ? preGeneratedValue : faker.Address.BuildingNumber();
-                    this.BuildingNumber = ParseNullableInt(value);
-                    name = nameof(BuildingNumber);
-                    break;
-
-                case 12:
                     value = hasPreGen ? preGeneratedValue : faker.Address.CityPrefix();
                     this.CityPrefix = value;
                     name = nameof(CityPrefix);
                     break;
 
-                case 13:
+                case 12:
                     value = hasPreGen ? preGeneratedValue : faker.Random.AlphaNumeric(5);
                     this.CountyCode = value;
                     name = nameof(CountyCode);
                     break;
 
-                case 14:
+                case 13:
                     value = hasPreGen ? preGeneratedValue : faker.Address.StateAbbr();
                     this.StateAbbr = value;
                     name = nameof(StateAbbr);
                     break;
 
-                case 15:
+                case 14:
                     value = hasPreGen ? preGeneratedValue : faker.Random.Number(1000, 9999).ToString();
                     this.ZipPlus4 = value;
                     name = nameof(ZipPlus4);
                     break;
 
-                case 16:
+                case 15:
                     value = hasPreGen ? preGeneratedValue : faker.Address.CountryCode();
                     this.CountryCode = value;
                     name = nameof(CountryCode);
@@ -283,11 +271,10 @@ namespace TestKniznice
 
                 case 6:
                     {
-                        int newAge = faker.Random.Int(18, 80);
-                        while (newAge.ToString() == old)
-                            newAge = faker.Random.Int(18, 80);
-
-                        newValue = newAge.ToString();
+                        // StreetNumber replaced old Age attribute
+                        newValue = faker.Address.BuildingNumber();
+                        while (newValue == old)
+                            newValue = faker.Address.BuildingNumber();
                         break;
                     }
 
@@ -325,21 +312,13 @@ namespace TestKniznice
 
                 case 11:
                     {
-                        newValue = faker.Address.SecondaryAddress();
-                        while (newValue == old)
-                            newValue = faker.Address.SecondaryAddress();
-                        break;
-                    }
-
-                case 12:
-                    {
                         newValue = faker.Address.City();
                         while (newValue == old)
                             newValue = faker.Address.City();
                         break;
                     }
 
-                case 13:
+                case 12:
                     {
                         newValue = faker.Address.County();
                         while (newValue == old)
@@ -347,7 +326,7 @@ namespace TestKniznice
                         break;
                     }
 
-                case 14:
+                case 13:
                     {
                         newValue = faker.Address.State();
                         while (newValue == old)
@@ -355,7 +334,7 @@ namespace TestKniznice
                         break;
                     }
 
-                case 15:
+                case 14:
                     {
                         newValue = faker.Address.ZipCode();
                         while (newValue == old)
@@ -363,7 +342,7 @@ namespace TestKniznice
                         break;
                     }
 
-                case 16:
+                case 15:
                     {
                         newValue = faker.Address.Country();
                         while (newValue == old)
@@ -389,17 +368,16 @@ namespace TestKniznice
                 case 3: return Email;
                 case 4: return Phone;
                 case 5: return Gender;
-                case 6: return Age?.ToString();
+                case 6: return StreetNumber;
                 case 7: return Company;
                 case 8: return JobTitle;
                 case 9: return CreditCardNumber;
                 case 10: return Street;
-                case 11: return StreetNumber;
-                case 12: return City;
-                case 13: return County;
-                case 14: return State;
-                case 15: return ZipCode;
-                case 16: return Country;
+                case 11: return City;
+                case 12: return County;
+                case 13: return State;
+                case 14: return ZipCode;
+                case 15: return Country;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i), i, "Invalid attribute index");
             }
@@ -424,17 +402,16 @@ namespace TestKniznice
                 case 3: Email = value; break;
                 case 4: Phone = value; break;
                 case 5: Gender = value; break;
-                case 6: Age = ParseNullableInt(value); break;
+                case 6: StreetNumber = value; break;
                 case 7: Company = value; break;
                 case 8: JobTitle = value; break;
                 case 9: CreditCardNumber = value; break;
                 case 10: Street = value; break;
-                case 11: StreetNumber = value; break;
-                case 12: City = value; break;
-                case 13: County = value; break;
-                case 14: State = value; break;
-                case 15: ZipCode = value; break;
-                case 16: Country = value; break;
+                case 11: City = value; break;
+                case 12: County = value; break;
+                case 13: State = value; break;
+                case 14: ZipCode = value; break;
+                case 15: Country = value; break;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i), i, "Invalid attribute index");
@@ -448,9 +425,9 @@ namespace TestKniznice
 
             if (!int.TryParse(input, out var result))
                 throw new FormatException($"Cannot parse '{input}'.");
-            
+
             return result;
-        }        
+        }
 
         public string GetAttributeName(int i)
         {
@@ -462,17 +439,16 @@ namespace TestKniznice
                 case 3: return nameof(Email);
                 case 4: return nameof(Phone);
                 case 5: return nameof(Gender);
-                case 6: return nameof(Age);
+                case 6: return nameof(StreetNumber);
                 case 7: return nameof(Company);
                 case 8: return nameof(JobTitle);
                 case 9: return nameof(CreditCardNumber);
                 case 10: return nameof(Street);
-                case 11: return nameof(StreetNumber);
-                case 12: return nameof(City);
-                case 13: return nameof(County);
-                case 14: return nameof(State);
-                case 15: return nameof(ZipCode);
-                case 16: return nameof(Country);
+                case 11: return nameof(City);
+                case 12: return nameof(County);
+                case 13: return nameof(State);
+                case 14: return nameof(ZipCode);
+                case 15: return nameof(Country);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(i), i, "Invalid attribute index");
             }
@@ -488,12 +464,11 @@ namespace TestKniznice
                 Email = this.Email,
                 Phone = this.Phone,
                 Gender = this.Gender,
-                Age = this.Age,
+                StreetNumber = this.StreetNumber,
                 Company = this.Company,
                 JobTitle = this.JobTitle,
                 CreditCardNumber = this.CreditCardNumber,
                 Street = this.Street,
-                StreetNumber = this.StreetNumber,
                 City = this.City,
                 County = this.County,
                 State = this.State,

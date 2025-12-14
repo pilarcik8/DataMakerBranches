@@ -204,7 +204,6 @@ namespace TestKniznice
                 .RuleFor(p => p.Email, f => f.Internet.Email())
                 .RuleFor(p => p.Phone, f => f.Phone.PhoneNumber())
                 .RuleFor(p => p.Gender, f => f.PickRandom(new[] { "Male", "Female", "Other" }))
-                .RuleFor(p => p.Age, f => f.Random.Int(18, 80))
                 .RuleFor(p => p.Company, f => f.Company.CompanyName())
                 .RuleFor(p => p.JobTitle, f => f.Name.JobTitle())
                 .RuleFor(p => p.CreditCardNumber, f => f.Finance.CreditCardNumber())
