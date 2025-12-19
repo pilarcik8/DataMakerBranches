@@ -1,11 +1,5 @@
 ﻿using Bogus;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace TestKniznice
@@ -23,7 +17,7 @@ namespace TestKniznice
     {
         const int MAX_RESULT_LIST_SIZE = 34;
         const int MIN_RESULT_LIST_SIZE = 17;
-        const int ITERATIONS = 1;
+        const int ITERATIONS = 5;
 
         static int ActualIteration;
         static HashSet<string> ClearedLogFiles = new HashSet<string>();
@@ -74,26 +68,25 @@ namespace TestKniznice
                     {
                         var massage = "L, R, B:";
                         WriteToFile("changeLog", massage);
-                        Console.WriteLine(massage);
+                        //Console.WriteLine(massage);
                         ExecuteAction(rightList, baseList, item, rightAct, faker);
                     }
                     else if (leftAct == ListAction.KEEP)
                     {
                         var massage = "R, B:";
                         WriteToFile("changeLog", massage);
-                        Console.WriteLine(massage);
+                        //Console.WriteLine(massage);
                         ExecuteAction(rightList, baseList, item, rightAct, faker);
                     }
                     else if (rightAct == ListAction.KEEP)
                     {
                         var massage = "L, B:";
                         WriteToFile("changeLog", massage);
-                        Console.WriteLine(massage);
+                        //Console.WriteLine(massage);
                         ExecuteAction(leftList, baseList, item, leftAct, faker);
                     }
                 }
 
-                // build iteration directory and export files there
                 string iterDir = Path.Combine("createdFiles", (i).ToString());
                 ExportList(leftList, "left");
                 ExportList(rightList, "right");
@@ -111,13 +104,13 @@ namespace TestKniznice
             {
                 var massage = $"Keeping item: {item}";
                 WriteToFile("changeLog", massage);
-                Console.WriteLine(massage);
+                //Console.WriteLine(massage);
             }
             else if (action == ListAction.REMOVE)
             {
                 var massage = $"Removing item: {item}";
                 WriteToFile("changeLog", massage);
-                Console.WriteLine(massage);
+                //Console.WriteLine(massage);
 
                 baseList.Remove(item);
                 branchList.Remove(item);
@@ -149,7 +142,7 @@ namespace TestKniznice
                 }
 
                 string message = $"Adding item: {newItem} at index {currentIndex}";
-                Console.WriteLine(message);
+                //Console.WriteLine(message);
                 WriteToFile("changeLog", message);
             }
             else if (action == ListAction.SHIFT)
@@ -160,7 +153,7 @@ namespace TestKniznice
                 {
                     var msg = $"Cannot shift item '{item}' in a list with <= 1 element.";
                     WriteToFile("changeLog", msg);
-                    Console.WriteLine(msg);
+                    //Console.WriteLine(msg);
                     return;
                 }
 
@@ -178,10 +171,9 @@ namespace TestKniznice
 
                 branchList.RemoveAt(currentIndex);
                 int insertIndex = targetIndex > currentIndex ? targetIndex - 1 : targetIndex;
-                insertIndex = Math.Clamp(insertIndex, 0, branchList.Count); // safe bounds
+                insertIndex = Math.Clamp(insertIndex, 0, branchList.Count);
                 branchList.Insert(insertIndex, item);
 
-                // Mirror change in baseSet if item exists there
                 int baseIndex = baseList.IndexOf(item);
                 if (baseIndex >= 0 && baseList.Count > 1)
                 {
@@ -195,7 +187,7 @@ namespace TestKniznice
 
                 var message = $"Shifting item: '{item}' from index {currentIndex} to {insertIndex}";
                 WriteToFile("changeLog", message);
-                Console.WriteLine(message);
+                //Console.WriteLine(message);
             }
 
         }
@@ -249,7 +241,6 @@ namespace TestKniznice
                 Directory.CreateDirectory(outputDir);
                 string path = Path.Combine(outputDir, $"{fileName}{ActualIteration}.txt");
 
-                //vymazanie obsahu súboru pri prvej iterácii
                 if (!ClearedLogFiles.Contains(path) && File.Exists(path))
                 {
                     Console.WriteLine($"TXT uložený do: {path}");

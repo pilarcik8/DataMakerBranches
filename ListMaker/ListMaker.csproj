@@ -6,13 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-	
+
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="35.6.5" />
+    <Compile Remove="createdFiles\**" />
+    <EmbeddedResource Remove="createdFiles\**" />
+    <None Remove="createdFiles\**" />
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="createdFiles\" />
+    <PackageReference Include="Bogus" Version="35.6.5" />
   </ItemGroup>
 	
 </Project>

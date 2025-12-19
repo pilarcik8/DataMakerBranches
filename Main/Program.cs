@@ -1,16 +1,6 @@
 ﻿using Bogus;
-using Bogus.Bson;
-using Bogus.DataSets;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Xml.Linq;
 using System.Xml.Serialization;
-using static System.Collections.Specialized.BitVector32;
-
 
 namespace TestKniznice
 {
@@ -31,7 +21,7 @@ namespace TestKniznice
         static HashSet<string> ClearedLogFiles = new();
 
         // Nastavenia generovania
-        const int ITERATIONS = 1;
+        const int ITERATIONS = 5;
 
         const bool ALLOW_CHANGE = true;
         const bool ALLOW_REMOVE = true;
